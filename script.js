@@ -100,29 +100,186 @@ function clearForm() {
 
     // ── Contact Form ──
     // Create a function called when user submits the form
-    function handleContact() {
-  console.log("Button clicked");
+ // ══════════════════════════════════════════════════
+//  REPLACE your handleContact() function in script.js
+//  with this one. Everything else in your script.js
+//  stays exactly the same.
+// ══════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+//  Drop-in replacement for handleContact() in script.js
+//  Also adds showModal() helper — no HTML changes needed.
+// ══════════════════════════════════════════════════
 
-  fetch("http://localhost:3000/message", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: "test",
-      email: "test@test.com",
-      topic: "test",
-      message: "hello"
-    })
-  })
-  .then(res => {
-    console.log("Response status:", res.status);
-    return res.text();
-  })
-  .then(data => {
-    console.log("SUCCESS:", data);
-  })
-  .catch(err => {
-    console.log("ERROR:", err);
+// ── Modal helper — inject once, reuse forever ────
+function showModal(type, message) {
+  // Remove any existing modal
+  const existing = document.getElementById('teleModal');
+  if (existing) existing.remove();
+
+  const isSuccess = type === 'success';
+
+  const modal = document.createElement('div');
+  modal.id = 'teleModal';
+  modal.style.cssText = `
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    animation: modalFadeIn 0.25s ease;
+  `;
+
+  modal.innerHTML = `
+    <style>
+      @keyframes modalFadeIn  { from { opacity:0; transform:scale(0.92); } to { opacity:1; transform:scale(1); } }
+      @keyframes modalFadeOut { from { opacity:1; transform:scale(1);    } to { opacity:0; transform:scale(0.92); } }
+    </style>
+    <div style="
+      background: ${isSuccess ? 'linear-gradient(135deg,#0d4f5c,#0c7576)' : 'linear-gradient(135deg,#5c1a0d,#7c2a1a)'};
+      border: 1.5px solid ${isSuccess ? 'rgba(15,224,182,0.35)' : 'rgba(255,120,80,0.35)'};
+      border-radius: 18px;
+      padding: 2.2rem 2.5rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      position: relative;
+    ">
+      <!-- Icon -->
+      <div style="font-size:2.8rem; margin-bottom:0.75rem; line-height:1;">
+        ${isSuccess ? '✅' : '⚠️'}
+      </div>
+
+      <!-- Title -->
+      <div style="
+        font-family:'Playfair Display',serif;
+        font-size:1.25rem;
+        font-weight:700;
+        color:#ffffff;
+        margin-bottom:0.6rem;
+        letter-spacing:0.03em;
+      ">
+        ${isSuccess ? 'Message Sent!' : 'Heads Up'}
+      </div>
+
+      <!-- Message -->
+      <p style="
+        color: rgba(255,255,255,0.88);
+        font-size: 0.97rem;
+        line-height: 1.65;
+        margin-bottom: 1.5rem;
+        font-family: 'DM Sans', sans-serif;
+      ">${message}</p>
+
+      <!-- Close button -->
+      <button onclick="document.getElementById('teleModal').remove()" style="
+        background: rgba(255,255,255,0.15);
+        border: 1.5px solid rgba(255,255,255,0.3);
+        border-radius: 50px;
+        color: #ffffff;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.92rem;
+        font-weight: 600;
+        padding: 0.55rem 2rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      "
+      onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.15)'"
+      >
+        ${isSuccess ? 'Great, thanks! 🙏' : 'OK, got it'}
+      </button>
+
+      <!-- Auto-close bar (success only) -->
+      ${isSuccess ? `
+      <div style="
+        margin-top: 1.2rem;
+        height: 3px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 2px;
+        overflow: hidden;
+      ">
+        <div id="modalTimer" style="
+          height: 100%;
+          width: 100%;
+          background: rgba(15,224,182,0.7);
+          border-radius: 2px;
+          transition: width 5s linear;
+        "></div>
+      </div>
+      <p style="color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:0.4rem;">Closes automatically in 5 seconds</p>
+      ` : ''}
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Close on backdrop click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.remove();
   });
+
+  // Auto-close + shrink bar for success
+  if (isSuccess) {
+    requestAnimationFrame(() => {
+      const bar = document.getElementById('modalTimer');
+      if (bar) bar.style.width = '0%';
+    });
+    setTimeout(() => {
+      if (document.getElementById('teleModal')) {
+        document.getElementById('teleModal').remove();
+      }
+    }, 5000);
+  }
+}
+
+
+// ── handleContact — replaces your old one ────────
+async function handleContact() {
+  const name    = document.getElementById("cname").value.trim();
+  const email   = document.getElementById("cemail").value.trim();
+  const topic   = document.getElementById("ctopic").value;
+  const message = document.getElementById("cmsg").value.trim();
+
+  // ── Validation — styled modals instead of alert() ──
+  if (!name)                         { showModal('error', 'Please enter your full name.');         return; }
+  if (!email || !email.includes('@')) { showModal('error', 'Please enter a valid email address.'); return; }
+  if (!topic)                         { showModal('error', 'Please select a topic.');              return; }
+  if (!message)                       { showModal('error', 'Please write your message.');          return; }
+
+  // ── Loading state on button ──
+  const btn = document.querySelector('#contactForm .btn-gold');
+  btn.textContent = 'Sending… ⏳';
+  btn.disabled = true;
+
+  try {
+    const res  = await fetch('/message', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ name, email, topic, message })
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      clearForm();
+      showModal('success', data.message);   // AI reply shown here
+    } 
+    // else {
+    //   showModal('error', data.error || 'Something went wrong. Please try again.');
+    // }
+
+  } catch (err) {
+    showModal('error', 'Could not reach the server. Something went wrong. Please try again.');
+    console.error(err);
+
+  } finally {
+    btn.textContent = 'Send Message ✈️';
+    btn.disabled = false;
+  }
 }
       // ?. - safty check - continue only if element exists
       // const name  = document.getElementById('cname')?.value.trim();
