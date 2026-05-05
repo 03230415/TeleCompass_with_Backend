@@ -331,7 +331,7 @@ async function handleContact() {
       // if condition
       if (!loc || !purp || !occ) {
         // alert
-        alert('Please answer all three questions first.');
+        firstshowModal('error', 'Please answer all three questions first.');
         // stop the function - end with the warning
         return;
       }
