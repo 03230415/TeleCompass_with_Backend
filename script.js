@@ -138,14 +138,14 @@ function showModal(type, message) {
       @keyframes modalFadeOut { from { opacity:1; transform:scale(1);    } to { opacity:0; transform:scale(0.92); } }
     </style>
     <div style="
-      background: ${isSuccess ? 'linear-gradient(135deg,#0d4f5c,#0c7576)' : 'linear-gradient(135deg,#5c1a0d,#7c2a1a)'};
-      border: 1.5px solid ${isSuccess ? 'rgba(15,224,182,0.35)' : 'rgba(255,120,80,0.35)'};
+      background: ${isSuccess ? 'linear-gradient(135deg,#0d4f5c,#0c7576)' : 'linear-gradient(135deg, rgba(66, 139, 121, 0.82),rgba(1, 103, 70, 0.73))'};
+      border: 1.5px solid ${isSuccess ? 'rgba(72, 130, 118, 0.64)' : 'rgba(21, 63, 61, 0.73)'};
       border-radius: 18px;
       padding: 2.2rem 2.5rem;
       max-width: 420px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 60px rgba(129, 105, 105, 0.79);
       position: relative;
     ">
       <!-- Icon -->
@@ -157,18 +157,19 @@ function showModal(type, message) {
       <div style="
         font-family:'Playfair Display',serif;
         font-size:1.25rem;
-        font-weight:700;
+        font-weight:900;
         color:#ffffff;
         margin-bottom:0.6rem;
         letter-spacing:0.03em;
       ">
-        ${isSuccess ? 'Message Sent!' : 'Heads Up'}
+        ${isSuccess ? 'Message Sent!' : 'Error❕'}
       </div>
 
       <!-- Message -->
       <p style="
-        color: rgba(255,255,255,0.88);
+        color: rgba(255, 251, 251, 0.94);
         font-size: 0.97rem;
+        font-weight: 600;
         line-height: 1.65;
         margin-bottom: 1.5rem;
         font-family: 'DM Sans', sans-serif;
@@ -176,10 +177,10 @@ function showModal(type, message) {
 
       <!-- Close button -->
       <button onclick="document.getElementById('teleModal').remove()" style="
-        background: rgba(255,255,255,0.15);
-        border: 1.5px solid rgba(255,255,255,0.3);
+        background: rgba(59, 134, 119, 0.9);
+        border: 1.5px solid rgba(30, 74, 66, 0.79);
         border-radius: 50px;
-        color: #ffffff;
+        color: #342222;
         font-family: 'DM Sans', sans-serif;
         font-size: 0.92rem;
         font-weight: 600;
@@ -187,8 +188,8 @@ function showModal(type, message) {
         cursor: pointer;
         transition: background 0.2s;
       "
-      onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-      onmouseout="this.style.background='rgba(255,255,255,0.15)'"
+      onmouseover="this.style.background='rgba(159, 138, 138, 0.58)'"
+      onmouseout="this.style.background='rgba(149, 132, 132, 0.54)'"
       >
         ${isSuccess ? 'Great, thanks! 🙏' : 'OK, got it'}
       </button>
@@ -205,7 +206,7 @@ function showModal(type, message) {
         <div id="modalTimer" style="
           height: 100%;
           width: 100%;
-          background: rgba(15,224,182,0.7);
+          background: rgba(115, 163, 153, 0.7);
           border-radius: 2px;
           transition: width 5s linear;
         "></div>
