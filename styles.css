@@ -500,6 +500,10 @@
         text-transform:uppercase; 
         letter-spacing:0.06em; 
       }
+      .stat-box:hover{
+         transform:translateY(-2px); 
+       
+      }
 
           /* ══════════════ BUTTONS ══════════════ */
       /* shape of view dashboard and learn more buttons */
@@ -582,10 +586,10 @@
         color: var(--text-light);
         transition: transform var(--t), box-shadow var(--t);
       }
-      /* .glass-card:hover { 
+      .glass-card:hover { 
         transform:translateY(-4px); 
         box-shadow:var(--shadow-lg); 
-      } */
+      }
        /* this is for the link for companies */
       .glass-card a {
         color:var(--text-light);
@@ -604,10 +608,10 @@
         color:var(--text-dark);
         transition: transform var(--t), box-shadow var(--t);
       }
-      /* .white-card:hover { 
+      .white-card:hover { 
         transform:translateY(-4px); 
         box-shadow:var(--shadow-lg); 
-      } */
+      }
 
       /* ══════════════ HIGHLIGHT LIST ══════════════ */
       .highlight-list { 
@@ -682,10 +686,10 @@
         border-top:4px solid var(--teal);
         transition:transform var(--t),box-shadow var(--t);
       }
-      /* .company-card:hover { 
+      .company-card:hover { 
         transform:translateY(-5px); 
         box-shadow:var(--shadow-md); 
-      } */
+      }
       /* icon emoji */
       .company-card .co-icon {
         width:52px; 
@@ -1047,5 +1051,3 @@
       }
   /* IMPORTANT: prevents anchor links (#section) from hiding under fixed navbar */
   /* scroll padding for sticky nav */    
-
- 
